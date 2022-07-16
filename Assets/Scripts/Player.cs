@@ -2,44 +2,58 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-[RequireComponent (typeof (Controller2D))]
+
 public class Player : MonoBehaviour {
 
-    Controller2D controller;
-
-    public float jumpHeight = 4;
-    public float timeToJumpApex = 0.4f;
-    float moveSpeed = 6;
-    float accelerationTimeAirborne = 0.2f;
-    float accelerationTimeGrounded = 0.1f;
-    float gravity;
-    float jumpVelocity;
-    float velocityXSmoothing;
-    Vector3 velocity;
+    int index_X, index_Y;
 
 
-    // Start is called before the first frame update
+    
+
+
+    private bool isMoving = false;
+    private Vector3 originalPosition, targetPosition;
+    [SerializeField] private float timeToMove = 0.3f;
+    public Vector3 axis;
+
     void Start() {
-        controller = GetComponent<Controller2D>();
         
-        gravity = -(2*jumpHeight)/Mathf.Pow(timeToJumpApex,2);
-        jumpVelocity = Mathf.Abs(gravity) * timeToJumpApex;
     }
 
     void Update() {
-
-        if (controller.collisions.above || controller.collisions.below) velocity.y = 0;
-
-        Vector2 input = new Vector2(Input.GetAxisRaw("Horizontal"), Input.GetAxisRaw("Vertical"));
-
-        if (Input.GetKeyDown(KeyCode.Space) && controller.collisions.below) {
-            velocity.y = jumpVelocity;
+        if (!isMoving) {
+            if (Input.GetKey(KeyCode.W) || Input.GetKey(KeyCode.UpArrow)) {
+                axis = Vector3.Cross(Vector3.down, Vector3.back);
+                StartCoroutine(Move(new Vector3(0,1, 0)));
+            } else if (Input.GetKey(KeyCode.S) || Input.GetKey(KeyCode.DownArrow)) {
+                axis = Vector3.Cross(Vector3.up, Vector3.back);
+                StartCoroutine(Move(new Vector3(0,-1, 0)));
+            } else if (Input.GetKey(KeyCode.A) || Input.GetKey(KeyCode.LeftArrow)) {
+                axis = Vector3.Cross(Vector3.back, Vector3.left);
+                StartCoroutine(Move(new Vector3(-1,0, 0)));
+            } else if (Input.GetKey(KeyCode.D) || Input.GetKey(KeyCode.RightArrow)) {
+                StartCoroutine(Move(new Vector3(1,0, 0)));
+                axis = Vector3.Cross(Vector3.back, Vector3.right);
+            }   
         }
+    }
 
-        float targetVelocityX = input.x*moveSpeed;
-        velocity.x = Mathf.SmoothDamp(velocity.x, targetVelocityX, ref velocityXSmoothing, (controller.collisions.below)?accelerationTimeGrounded:accelerationTimeAirborne);
-        velocity.y += gravity * Time.deltaTime;
-        controller.Move(velocity * Time.deltaTime);
+    private IEnumerator Move(Vector3 moveDirection) {
+        isMoving = true;
+        float elapsedTime = 0f;
+        originalPosition = transform.position;
+        targetPosition = originalPosition + moveDirection;
+
+        while (elapsedTime < timeToMove) {
+            transform.RotateAround(transform.position, axis, 90/timeToMove*Time.deltaTime);
+            transform.position = Vector3.Lerp(originalPosition, targetPosition, (elapsedTime/timeToMove));
+            
+            elapsedTime += Time.deltaTime;
+            yield return null;
+        }
+        transform.position = targetPosition;
+        transform.rotation = new Quaternion(0, Mathf.Round(transform.rotation.x), Mathf.Round(transform.rotation.y), Mathf.Round(transform.rotation.z));
+        isMoving = false;
     }
 
 } 
