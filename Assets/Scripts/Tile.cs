@@ -3,9 +3,19 @@ using System.Collections.Generic;
 using UnityEngine;
 
 public class Tile : MonoBehaviour{
+    /*tile id definition:
+    1 - 6 -> weighted tiles
+    0 -> empty/space tile
+    -6 - -1 -> fragile tiles
+    7 -> standard tiles
+    8 -> breakable tile
+    9 -> you win
+    11-16 -> specific number tile
+    */
+
     private int idNum; 
 
-    private Tile(int id){
+    public Tile(int id){
         idNum = id;
     }
     public int getid(){
