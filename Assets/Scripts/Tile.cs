@@ -29,4 +29,5 @@ public class Tile : MonoBehaviour{
             idNum ++;
         }
     }
+ 
 }
