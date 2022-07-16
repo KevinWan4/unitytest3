@@ -15,7 +15,7 @@ public class Levels : MonoBehaviour
 
     }
 
-    void newScene((reference tilegrid), int level)
+    void newScene(int level)
     {
 
     }
