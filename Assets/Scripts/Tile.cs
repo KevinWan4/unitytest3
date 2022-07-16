@@ -3,20 +3,20 @@ using System.Collections.Generic;
 using UnityEngine;
 
 public class Tile : MonoBehaviour{
-    private idNum; 
+    private int idNum; 
 
     private Tile(int id){
         idNum = id;
     }
-    public getid(){
+    public int getid(){
         return idNum;
     }
     void updateTile(){
-        if(this.idNum == 8){
-            this.idNum = 0;
+        if(idNum == 8){
+            idNum = 0;
         }
-        else if(this.idNum<0){
-            this.idNum ++;
+        else if(idNum<0){
+            idNum ++;
         }
     }
 }

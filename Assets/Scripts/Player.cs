@@ -5,6 +5,13 @@ using UnityEngine;
 
 public class Player : MonoBehaviour {
 
+    //used in other classes
+    int level;
+    
+    
+
+
+    //used by me
     int index_X, index_Y;
 
 
@@ -57,5 +64,3 @@ public class Player : MonoBehaviour {
     }
 
 } 
-
-
