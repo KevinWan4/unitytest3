@@ -5,13 +5,13 @@ using UnityEngine;
 public class Tile : MonoBehaviour{
     private int idNum; 
 
-    private Tile(int id){
+    public Tile(int id){
         idNum = id;
     }
     public int getid(){
         return idNum;
     }
-    void updateTile(){
+    public void updateTile(){
         if(idNum == 8){
             idNum = 0;
         }

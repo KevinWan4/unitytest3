@@ -6,13 +6,12 @@ using UnityEngine;
 public class Player : MonoBehaviour {
 
     //used in other classes
-    int level;
+    private int level = 0;
     
-    
-
-
+    Tile[,] tileGrid = new Tile[0,0];
+    Tile tile1 = new Tile(4);
     //used by me
-    int index_X, index_Y;
+    private int index_X, index_Y;
 
 
     
@@ -28,6 +27,7 @@ public class Player : MonoBehaviour {
     }
 
     void Update() {
+        print(tile1.getid());
         if (!isMoving) {
             if (Input.GetKey(KeyCode.W) || Input.GetKey(KeyCode.UpArrow)) {
                 axis = Vector3.Cross(Vector3.down, Vector3.back);
@@ -45,6 +45,8 @@ public class Player : MonoBehaviour {
         }
     }
 
+
+
     private IEnumerator Move(Vector3 moveDirection) {
         isMoving = true;
         float elapsedTime = 0f;
@@ -59,7 +61,7 @@ public class Player : MonoBehaviour {
             yield return null;
         }
         transform.position = targetPosition;
-        transform.rotation = new Quaternion(0, Mathf.Round(transform.rotation.x), Mathf.Round(transform.rotation.y), Mathf.Round(transform.rotation.z));
+        transform.rotation = new Quaternion(Mathf.Round(transform.rotation.x * 1000f) * 0.001f, Mathf.Round(transform.rotation.y * 1000f) * 0.001f, Mathf.Round(transform.rotation.z * 1000f) * 0.001f, transform.rotation.w);
         isMoving = false;
     }
 
