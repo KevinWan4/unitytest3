@@ -9,9 +9,11 @@ public class Player : MonoBehaviour {
     private int level = 0;
     
     Tile[,] tileGrid = new Tile[0,0];
-    Tile tile1 = new Tile(4);
+    GameObject[] taggedTiles;
+    Tile currentTile;
     //used by me
     private int index_X, index_Y;
+
 
     Faces faces;
     
@@ -32,33 +34,39 @@ public class Player : MonoBehaviour {
         // print(tile1.getid());
         if (!isMoving) {
             if (Input.GetKey(KeyCode.W) || Input.GetKey(KeyCode.UpArrow)) {
-                tileGrid[index_X, index_Y].updateTile();
                 index_Y++;
                 axis = Vector3.Cross(Vector3.down, Vector3.back);
                 StartCoroutine(Move(new Vector3(0,1, 0)));
                 faces.changeFaces("up");
-                CheckTile(tileGrid[index_X, index_Y].getid());
+
+                setCurrentTile();
+                // CheckTile(tileGrid[index_X, index_Y].getid());
             } else if (Input.GetKey(KeyCode.S) || Input.GetKey(KeyCode.DownArrow)) {
-                tileGrid[index_X, index_Y].updateTile();
                 index_Y--;
                 axis = Vector3.Cross(Vector3.up, Vector3.back);
                 StartCoroutine(Move(new Vector3(0,-1, 0)));
                 faces.changeFaces("down");
-                CheckTile(tileGrid[index_X, index_Y].getid());
+
+                setCurrentTile();
+                // CheckTile(tileGrid[index_X, index_Y].getid());
             } else if (Input.GetKey(KeyCode.A) || Input.GetKey(KeyCode.LeftArrow)) {
-                tileGrid[index_X, index_Y].updateTile();
+                // tileGrid[index_X, index_Y].updateTile();
                 index_X--;
                 axis = Vector3.Cross(Vector3.back, Vector3.left);
                 StartCoroutine(Move(new Vector3(-1,0, 0)));
                 faces.changeFaces("left");
-                CheckTile(tileGrid[index_X, index_Y].getid());
+
+                setCurrentTile();
+                // CheckTile(tileGrid[index_X, index_Y].getid());
             } else if (Input.GetKey(KeyCode.D) || Input.GetKey(KeyCode.RightArrow)) {
-                tileGrid[index_X, index_Y].updateTile();
+                // tileGrid[index_X, index_Y].updateTile();
                 index_X++;
                 StartCoroutine(Move(new Vector3(1,0, 0)));
                 axis = Vector3.Cross(Vector3.back, Vector3.right);
                 faces.changeFaces("right");
-                CheckTile(tileGrid[index_X, index_Y].getid());
+
+                setCurrentTile();
+                // CheckTile(tileGrid[index_X, index_Y].getid());
             } 
         }
     }
@@ -106,7 +114,23 @@ public class Player : MonoBehaviour {
         }
     }
     void CheckTile(int id) {
+        // if (tile is not ok) death
+        // else if tile is =9 {
+            
+        // }
+    }
+    
+    void setCurrentTile() {
+        taggedTiles = GameObject.FindGameObjectsWithTag(index_X+","+(index_Y));
+        if (taggedTiles.Length == 0) {
+            death();
+        } else {
+            currentTile = taggedTiles[0].GetComponent(typeof(Tile)) as Tile;
+        }
+    }
 
+    void death() {
+        print("you died!");
     }
 
     private IEnumerator Move(Vector3 moveDirection) {
