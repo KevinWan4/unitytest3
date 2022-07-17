@@ -2,9 +2,9 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class MusicControl : MonoBehaviour
+public class MusicControlScript : MonoBehaviour
 {
-    public static MusicControl instance; // Creates a static varible for a MusicControl instance
+    public static MusicControlScript instance; // Creates a static varible for a MusicControlScript instance
 
     private void Awake() // Runs before void Start()
     {
