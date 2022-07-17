@@ -13,7 +13,7 @@ public class Levels : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        
+        SceneManager.LoadScene("MainMenu");
     }
 
     // void update() {
