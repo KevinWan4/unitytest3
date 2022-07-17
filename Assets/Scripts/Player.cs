@@ -1,6 +1,8 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
+using UnityEngine.UI;
 
 
 public class Player : MonoBehaviour {
@@ -17,7 +19,7 @@ public class Player : MonoBehaviour {
 
     Faces faces;
     
-
+    public Image img;
 
     private bool isMoving = false;
     private Vector3 originalPosition, targetPosition;
@@ -77,9 +79,10 @@ public class Player : MonoBehaviour {
     
     void checkTile() {
         if (Mathf.Abs(currentTile.getid()) < faces.front) {
-            death();
+            playerDied();
         } else if (currentTile.getid() == 9) {
             print("You win");
+            SceneManager.LoadScene((SceneManager.GetActiveScene().buildIndex)+1);
         }
         
     }
@@ -87,14 +90,36 @@ public class Player : MonoBehaviour {
     void setCurrentTile() {
         taggedTiles = GameObject.FindGameObjectsWithTag(index_X+","+(index_Y));
         if (taggedTiles.Length == 0) {
-            death();
+            playerDied();
         } else {
             currentTile = taggedTiles[0].GetComponent(typeof(Tile)) as Tile;
         }
     }
 
-    void death() {
-        print("you died!");
+    public void playerDied() {
+        StartCoroutine(fadeTransition(true));
+        SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
+        StartCoroutine(fadeTransition(false));
+    }
+
+    IEnumerator fadeTransition(bool fadeAway)
+    {
+        if (fadeAway)
+        {
+            //images fades
+            for (float i = 1; i >= 0; i -= Time.deltaTime)
+            {
+                img.color = new Color(1,1,1,i);
+                yield return null;
+            }
+        } else {
+            //image becomes transparent
+            for (float i = 0; i <= 1; i += Time.deltaTime)
+            {
+                img.color = new Color(1,1,1,i);
+                yield return null;
+            }
+        }
     }
 
     private IEnumerator Move(Vector3 moveDirection) {

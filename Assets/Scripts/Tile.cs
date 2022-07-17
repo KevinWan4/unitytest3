@@ -15,7 +15,7 @@ public class Tile : MonoBehaviour{
 
     
 
-    private int idNum; 
+    public int idNum; 
     Vector2 indexPosition;
 
     public Tile(int id){
@@ -27,6 +27,7 @@ public class Tile : MonoBehaviour{
     public void updateTile(){
         if(idNum == 8){
             idNum = 0;
+            deleteTile();
         }
         else if(idNum<0){
             idNum ++;
@@ -34,7 +35,7 @@ public class Tile : MonoBehaviour{
     }
 
     public void deleteTile() {
-        idNum = 0;
+        // idNum = 0;
         transform.position = new Vector3(-100,-100,-100);
     }
 }

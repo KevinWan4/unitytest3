@@ -16,12 +16,6 @@ public class Levels : MonoBehaviour
         
     }
 
-    // end level animation
-    void endLevel()
-    {
-        
-    }
-
     // void update() {
     //     OnTriggerEnter2D(GetComponent<BoxCollider2D>());
     // }
@@ -29,14 +23,12 @@ public class Levels : MonoBehaviour
     public void OnTriggerEnter2D(Collider2D other) {
         if(other.CompareTag("Player")) {
             print("collide");
-            endLevel();
             SceneManager.LoadScene(newLevel);
         }
         
     }
 
     Tile[,] newScene (int level) {
-        endLevel();
         level++;
         if (level==1) {
             
