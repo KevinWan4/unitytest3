@@ -32,5 +32,9 @@ public class Tile : MonoBehaviour{
             idNum ++;
         }
     }
- 
+
+    public void deleteTile() {
+        idNum = 0;
+        transform.position = new Vector3(-100,-100,-100);
+    }
 }

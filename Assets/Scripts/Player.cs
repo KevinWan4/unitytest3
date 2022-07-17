@@ -28,47 +28,96 @@ public class Player : MonoBehaviour {
 
     void Start() {
         faces.setInitial();
+        currentTile = GameObject.FindGameObjectsWithTag("0,0")[0].GetComponent(typeof(Tile)) as Tile;
     }
 
     void Update() {
-        // print(tile1.getid());
+        
         if (!isMoving) {
             if (Input.GetKey(KeyCode.W) || Input.GetKey(KeyCode.UpArrow)) {
+                currentTile.updateTile();
                 index_Y++;
                 axis = Vector3.Cross(Vector3.down, Vector3.back);
                 StartCoroutine(Move(new Vector3(0,1, 0)));
                 faces.changeFaces("up");
 
                 setCurrentTile();
-                // CheckTile(tileGrid[index_X, index_Y].getid());
+                checkTile();
             } else if (Input.GetKey(KeyCode.S) || Input.GetKey(KeyCode.DownArrow)) {
+                currentTile.updateTile();
                 index_Y--;
                 axis = Vector3.Cross(Vector3.up, Vector3.back);
                 StartCoroutine(Move(new Vector3(0,-1, 0)));
                 faces.changeFaces("down");
 
                 setCurrentTile();
-                // CheckTile(tileGrid[index_X, index_Y].getid());
+                checkTile();
             } else if (Input.GetKey(KeyCode.A) || Input.GetKey(KeyCode.LeftArrow)) {
-                // tileGrid[index_X, index_Y].updateTile();
+                currentTile.updateTile();
                 index_X--;
                 axis = Vector3.Cross(Vector3.back, Vector3.left);
                 StartCoroutine(Move(new Vector3(-1,0, 0)));
                 faces.changeFaces("left");
 
                 setCurrentTile();
-                // CheckTile(tileGrid[index_X, index_Y].getid());
+                checkTile();
             } else if (Input.GetKey(KeyCode.D) || Input.GetKey(KeyCode.RightArrow)) {
-                // tileGrid[index_X, index_Y].updateTile();
+                currentTile.updateTile();
                 index_X++;
                 StartCoroutine(Move(new Vector3(1,0, 0)));
                 axis = Vector3.Cross(Vector3.back, Vector3.right);
                 faces.changeFaces("right");
 
                 setCurrentTile();
-                // CheckTile(tileGrid[index_X, index_Y].getid());
+                checkTile();
             } 
         }
+    }
+
+    
+    void checkTile() {
+        if (Mathf.Abs(currentTile.getid()) < faces.front) {
+            death();
+        } else if (currentTile.getid() == 9) {
+            print("You win");
+        }
+        
+    }
+    
+    void setCurrentTile() {
+        taggedTiles = GameObject.FindGameObjectsWithTag(index_X+","+(index_Y));
+        if (taggedTiles.Length == 0) {
+            death();
+        } else {
+            currentTile = taggedTiles[0].GetComponent(typeof(Tile)) as Tile;
+        }
+    }
+
+    void death() {
+        print("you died!");
+    }
+
+    private IEnumerator Move(Vector3 moveDirection) {
+        isMoving = true;
+        float elapsedTime = 0f;
+        originalPosition = transform.position;
+        targetPosition = originalPosition + moveDirection * moveDistance;
+        originalRotation = transform.rotation;
+
+        while (elapsedTime < timeToMove) {
+            
+            transform.RotateAround(transform.position, axis, 90/timeToMove*Time.deltaTime);
+            transform.position = Vector3.Lerp(originalPosition, targetPosition, (elapsedTime/timeToMove));
+            
+
+            elapsedTime += Time.deltaTime;
+            yield return null;
+        }
+        
+        transform.position = targetPosition;
+        transform.rotation = originalRotation;
+        transform.RotateAround(transform.position, axis, 90);
+        isMoving = false;
     }
 
     public struct Faces {
@@ -112,48 +161,6 @@ public class Player : MonoBehaviour {
             right = 4;
             back = 1;
         }
-    }
-    void CheckTile(int id) {
-        // if (tile is not ok) death
-        // else if tile is =9 {
-            
-        // }
-    }
-    
-    void setCurrentTile() {
-        taggedTiles = GameObject.FindGameObjectsWithTag(index_X+","+(index_Y));
-        if (taggedTiles.Length == 0) {
-            death();
-        } else {
-            currentTile = taggedTiles[0].GetComponent(typeof(Tile)) as Tile;
-        }
-    }
-
-    void death() {
-        print("you died!");
-    }
-
-    private IEnumerator Move(Vector3 moveDirection) {
-        isMoving = true;
-        float elapsedTime = 0f;
-        originalPosition = transform.position;
-        targetPosition = originalPosition + moveDirection * moveDistance;
-        originalRotation = transform.rotation;
-
-        while (elapsedTime < timeToMove) {
-            
-            transform.RotateAround(transform.position, axis, 90/timeToMove*Time.deltaTime);
-            transform.position = Vector3.Lerp(originalPosition, targetPosition, (elapsedTime/timeToMove));
-            
-
-            elapsedTime += Time.deltaTime;
-            yield return null;
-        }
-        
-        transform.position = targetPosition;
-        transform.rotation = originalRotation;
-        transform.RotateAround(transform.position, axis, 90);
-        isMoving = false;
     }
 
     
