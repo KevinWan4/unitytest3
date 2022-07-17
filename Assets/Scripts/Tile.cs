@@ -13,6 +13,8 @@ public class Tile : MonoBehaviour{
     11-16 -> specific number tile
     */
 
+    
+
     private int idNum; 
     Vector2 indexPosition;
 
@@ -30,4 +32,5 @@ public class Tile : MonoBehaviour{
             idNum ++;
         }
     }
+ 
 }
