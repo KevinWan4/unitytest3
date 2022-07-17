@@ -13,6 +13,8 @@ public class Tile : MonoBehaviour{
     11-16 -> specific number tile
     */
 
+    
+
     private int idNum; 
 
     public Tile(int id){
