@@ -14,6 +14,7 @@ public class Tile : MonoBehaviour{
     */
 
     private int idNum; 
+    Vector2 indexPosition;
 
     public Tile(int id){
         idNum = id;

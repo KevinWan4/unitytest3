@@ -9,7 +9,7 @@ public class Player : MonoBehaviour {
     private int level = 0;
     
     Tile[,] tileGrid = new Tile[0,0];
-    Tile tile1 = new Tile(4);
+    // Tile tile1 = new Tile(4);
     //used by me
     private int index_X, index_Y;
 
